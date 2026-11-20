@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Leonida Map</title>
+  <meta name="description" content="Fan-made interactive map for GTA VI: filter locations, track collectibles, add your own markers. Progress is saved in your browser.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23ec4899'/%3E%3Cpath d='M16 6a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7zm0 9.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5z' fill='white'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <button class="drawer-toggle" id="drawerToggle" aria-label="Open sidebar">☰</button>
+
+  <aside class="sidebar" id="sidebar">
+    <header class="brand">
+      <div class="brand-kicker">Grand Theft Auto VI</div>
+      <h1><span class="brand-a">LEO</span><span class="brand-b">NIDA</span> <small>map</small></h1>
+      <p class="brand-meta" id="metaLine"></p>
+    </header>
+
+    <section class="progress-card">
+      <div class="progress-top">
+        <span id="foundLine">0 / 0 found</span>
+        <strong id="foundPct">0%</strong>
+      </div>
+      <div class="bar"><div class="bar-fill" id="barFill"></div></div>
+      <div class="progress-bottom">
+        <span id="remainLine">0 remaining</span>
+        <span class="pill">Saved locally</span>
+      </div>
+    </section>
+
+    <div class="search">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input id="search" type="search" placeholder="Search markers, types, notes…" autocomplete="off">
+    </div>
+
+    <div class="scroll" id="scroll">
+      <div id="searchResults" class="search-results" hidden></div>
+
+      <div id="mainPanel">
+        <details class="fold" id="myMarkersFold">
+          <summary><span>My markers</span><span class="count" id="myCount">0</span></summary>
+          <div class="fold-body">
+            <button class="btn btn-wide" id="addMarkerBtn">+ Add a marker</button>
+            <p class="hint" id="addHint" hidden>Click anywhere on the map to drop it. Press Esc to cancel.</p>
+            <ul class="my-list" id="myList"></ul>
+          </div>
+        </details>
+
+        <div class="row-head">
+          <span class="label">Categories</span>
+          <span class="mini-btns">
+            <button class="mini" data-all="on">All</button>
+            <button class="mini" data-all="off">None</button>
+          </span>
+        </div>
+
+        <select id="jumpType" class="select">
+          <option value="">Jump to type…</option>
+        </select>
+
+        <div class="chips" id="toggleChips">
+          <button class="chip toggle on" id="regionToggle">✓ Region shapes</button>
+          <button class="chip toggle on" id="labelToggle">✓ Labels</button>
+        </div>
+        <div class="chips" id="countyChips"></div>
+
+        <div id="tree" class="tree"></div>
+
+        <div class="filters">
+          <div class="seg" id="statusSeg">
+            <button data-status="all" class="on">All <b id="cAll">0</b></button>
+            <button data-status="done">Complete <b id="cDone">0</b></button>
+            <button data-status="todo">Incomplete <b id="cTodo">0</b></button>
+          </div>
+          <label class="check-row"><input type="checkbox" id="hideFound"> <span>Hide found<small>keep only what is left to collect</small></span></label>
+          <label class="check-row"><input type="checkbox" id="onlyNotes"> <span>Only with notes</span></label>
+        </div>
+
+        <div class="io">
+          <button class="btn" id="exportBtn">Export</button>
+          <button class="btn" id="importBtn">Import</button>
+          <button class="btn danger" id="resetBtn">Reset</button>
+          <input type="file" id="importFile" accept="application/json" hidden>
+        </div>
+        <p class="fine">Progress, notes and your markers are stored only in this browser. No account, nothing uploaded.</p>
+        <p class="fine">Fan-made and unofficial. Map art is an original stylized drawing and marker positions are placeholders. Grand Theft Auto is a trademark of Rockstar Games.</p>
+      </div>
+    </div>
+  </aside>
+
+  <main class="map-wrap">
+    <div id="map" aria-label="Interactive map of Leonida"></div>
+    <nav class="section-chips" id="sectionChips"></nav>
+    <div class="map-tools">
+      <button id="themeBtn" title="Toggle light/dark" aria-label="Toggle theme">◐</button>
+      <button id="zoomIn" title="Zoom in" aria-label="Zoom in">+</button>
+      <button id="zoomOut" title="Zoom out" aria-label="Zoom out">−</button>
+      <button id="fsBtn" title="Fullscreen" aria-label="Fullscreen">⛶</button>
+    </div>
+    <div class="coords" id="coords"></div>
+    <div class="toast" id="toast" role="status"></div>
+  </main>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+  <script src="data/markers.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
